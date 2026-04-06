@@ -4,6 +4,7 @@
 - **Team Members**: [Trịnh Thị Huyền Trang, Lê Việt Anh, Nguyễn Thành Trung, Lương Hoàng Anh, Trương Ngọc Hải]
 - **Deployment Date**: 2026-04-06
 - **Latest Test Run**: 2026-04-06 09:02-09:03 UTC (5/5 tests PASSED)
+- **Github Repo**: https://github.com/viet-anh-le/Lab3-35.git
 
 ---
 
@@ -359,7 +360,5 @@ NEVER guess or make up information - ONLY use tool results"
 ### Final Verdict
 
 The ReAct Travel Agent successfully demonstrates **production-ready structured reasoning** with zero hallucinations and reliable tool usage. The system properly sequences information gathering, handles errors gracefully, and provides factually accurate travel recommendations. The identified issues are easily fixable, and the architecture scales well to production workloads.
-
-**Status: READY FOR STAGING ENVIRONMENT** ✅
 
 ---
