@@ -45,3 +45,14 @@ def fetch_flights(departure_city: str, destination_city: str, departure_date: st
         "departure_date": departure_date,
         "flight_results": response.get("results", [])
     }
+
+if main := __name__ == "__main__":
+    # Example usage
+    tool_input = json.dumps({
+        "departure_city": "Hà Nội",
+        "destination_city": "TP Hồ Chí Minh",
+        "departure_date": "2024-07-15"
+    })
+    result = flight_search_tool_wrapper(tool_input)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    

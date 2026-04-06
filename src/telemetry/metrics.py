@@ -27,10 +27,22 @@ class PerformanceTracker:
 
     def _calculate_cost(self, model: str, usage: Dict[str, int]) -> float:
         """
-        TODO: Implement real pricing logic.
-        For now, returns a dummy constant.
+        Calculates the cost of a request based on the model and token usage.
+        Pricing is based on the model's token cost per 1,000 tokens.
         """
-        return (usage.get("total_tokens", 0) / 1000) * 0.01
+        # Define pricing per 1,000 tokens for different models
+        pricing = {
+            "gpt-4": 0.03,  # Example pricing for GPT-4
+            "gpt-3.5": 0.002,  # Example pricing for GPT-3.5
+            "default": 0.01  # Default pricing for unknown models
+        }
+
+        # Get the cost per 1,000 tokens for the given model, defaulting to "default" pricing
+        cost_per_1000_tokens = pricing.get(model, pricing["default"])
+
+        # Calculate the total cost based on token usage
+        total_tokens = usage.get("total_tokens", 0)
+        return (total_tokens / 1000) * cost_per_1000_tokens
 
 # Global tracker instance
 tracker = PerformanceTracker()

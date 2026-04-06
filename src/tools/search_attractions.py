@@ -38,7 +38,21 @@ def fetch_attractions(city: str) -> Dict[str, Any]:
 
 def format_response(city: str, response: Dict[str, Any]) -> Dict[str, Any]:
     """Format the API response into a structured dictionary."""
+    print(response['results'])
+    contents = []
+    for item in response.get("results", []):
+        contents.append({
+           "content": item.get("content"),
+        })
     return {
         "city": city,
-        "attractions_content": response.get("content", [])
+        "attractions": contents
     }
+    
+    
+if main := __name__ == "__main__":
+    # Example usage
+    city = "Hà Nội"
+    tool_input = json.dumps({"city": city})
+    result = attraction_tool_wrapper(tool_input)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
