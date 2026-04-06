@@ -1,14 +1,14 @@
 # Individual Report: Lab 3 - Chatbot vs ReAct Agent
 
-- **Student Name**: Lê Việt Anh
-- **Student ID**: 2A202600112
-- **Date**: 06/04/2026
+- **Student Name**: [Your Name Here]
+- **Student ID**: [Your ID Here]
+- **Date**: [Date Here]
 
 ---
 
 ## I. Technical Contribution (15 Points)
 
-_Describe your specific contribution to the codebase (e.g., implemented a specific tool, fixed the parser, etc.)._
+*Describe your specific contribution to the codebase (e.g., implemented a specific tool, fixed the parser, etc.).*
 
 - **Modules Implementated**: [e.g., `src/tools/search_tool.py`]
 - **Code Highlights**: [Copy snippets or link file lines]
@@ -18,7 +18,7 @@ _Describe your specific contribution to the codebase (e.g., implemented a specif
 
 ## II. Debugging Case Study (10 Points)
 
-_Analyze a specific failure event you encountered during the lab using the logging system._
+*Analyze a specific failure event you encountered during the lab using the logging system.*
 
 - **Problem Description**: [e.g., Agent caught in an infinite loop with `Action: search(None)`]
 - **Log Source**: [Link or snippet from `logs/YYYY-MM-DD.log`]
@@ -29,17 +29,17 @@ _Analyze a specific failure event you encountered during the lab using the loggi
 
 ## III. Personal Insights: Chatbot vs ReAct (10 Points)
 
-_Reflect on the reasoning capability difference._
+*Reflect on the reasoning capability difference.*
 
 1.  **Reasoning**: How did the `Thought` block help the agent compared to a direct Chatbot answer?
-2.  **Reliability**: In which cases did the Agent actually perform _worse_ than the Chatbot?
+2.  **Reliability**: In which cases did the Agent actually perform *worse* than the Chatbot?
 3.  **Observation**: How did the environment feedback (observations) influence the next steps?
 
 ---
 
 ## IV. Future Improvements (5 Points)
 
-_How would you scale this for a production-level AI agent system?_
+*How would you scale this for a production-level AI agent system?*
 
 - **Scalability**: [e.g., Use an asynchronous queue for tool calls]
 - **Safety**: [e.g., Implement a 'Supervisor' LLM to audit the agent's actions]
