@@ -7,8 +7,11 @@ from src.telemetry.logger import logger
 
 class ReActAgent:
     """
-    ReAct-style Agent that follows the Thought-Action-Observation loop.
-    Implements full ReAct reasoning with tool execution and memory.
+    v2 ReAct Agent with STRICT, WELL-ENGINEERED PROMPT.
+    Implements full ReAct reasoning with mandatory tool execution and memory.
+    
+    Designed to demonstrate best practices in prompt engineering for tool-using agents.
+    Contrasts with v1 which has identical architecture but poor prompt.
     """
     
     def __init__(self, llm: LLMProvider, tools: List[Dict[str, Any]], max_steps: int = 10):
@@ -200,3 +203,16 @@ NOW START. USE TOOLS FIRST. NO HALLUCINATIONS."""
             return result
         except Exception as e:
             return json.dumps({"status": "error", "message": f"Error parsing/executing tool: {str(e)}"})
+
+    def get_version_info(self) -> Dict[str, Any]:
+        """Return metadata about this agent version"""
+        return {
+            "version": "v2",
+            "name": "ReActAgent",
+            "description": "ReAct agent with strict prompt engineering",
+            "has_tools": True,
+            "has_reasoning": True,
+            "prompt_quality": "EXCELLENT - strict, mandatory tool forcing, no hallucinations",
+            "max_steps": self.max_steps,
+            "purpose": "Production-ready travel agent with best-practice prompting"
+        }
