@@ -3,7 +3,7 @@
 ### File Structure Verification
 
 #### ✅ Core Agent Files
-- `agent.py` - ChatBot (baseline, no tools) - 3278 bytes
+- `chatbot.py` - ChatBot (baseline, no tools) - 3278 bytes
 - `agent_v1.py` - ReActAgent v1 (tools with POOR prompt) - 6710 bytes
 - `src/agent/agent.py` - ReActAgent v2 (tools with GOOD prompt) - exists ✓
 
