@@ -117,24 +117,19 @@ class ReActAgent:
             m_final = re.search(r"Final Answer:\s*(.+)", text, re.IGNORECASE | re.DOTALL)
             if m_final:
                 final = m_final.group(1).strip()
-                # If there are tool observations collected in history, include them in the output
+                # Collect tool observations separately (do NOT mix into the displayed content)
                 obs_list = [
                     h.get("observation")
                     for h in self.history
                     if isinstance(h, dict) and "observation" in h
                 ]
-                if obs_list:
-                    # join observations (they are already serialized strings)
-                    obs_text_all = "\n\n-- Tool Observations --\n" + "\n\n".join(obs_list)
-                    combined = obs_text_all + "\n\n" + final
-                else:
-                    combined = final
 
                 logger.log_event(
                     "AGENT_END",
                     {"steps": steps, "final": final, "included_observations": bool(obs_list)},
                 )
-                return combined
+                # Return structured output so callers (UI) can choose to display only 'content'
+                return {"content": final, "observations": obs_list}
 
             # 3) Parse Action: tool_name(arg1, arg2)  -- args can be anything inside parentheses
             m = re.search(r"Action:\s*([A-Za-z0-9_]+)\s*\((.*)\)", text, re.IGNORECASE | re.DOTALL)

@@ -25,13 +25,59 @@ class GeminiProvider(LLMProvider):
         end_time = time.time()
         latency_ms = int((end_time - start_time) * 1000)
 
-        # Gemini usage data is in response.usage_metadata
-        content = response.text
-        usage = {
-            "prompt_tokens": response.usage_metadata.prompt_token_count,
-            "completion_tokens": response.usage_metadata.candidates_token_count,
-            "total_tokens": response.usage_metadata.total_token_count,
-        }
+        # Try to extract text robustly. Some Gemini responses may not populate response.text
+        content = ""
+        try:
+            if hasattr(response, "text") and response.text:
+                content = response.text
+            else:
+                # Try candidates (first candidate preferred)
+                candidates = getattr(response, "candidates", None)
+                if candidates:
+                    cand = candidates[0]
+                    # candidate may have text, content, or parts
+                    if hasattr(cand, "text") and cand.text:
+                        content = cand.text
+                    elif hasattr(cand, "content") and cand.content:
+                        cont = cand.content
+                        if isinstance(cont, str):
+                            content = cont
+                        else:
+                            # join parts
+                            try:
+                                content = "".join([getattr(p, "text", str(p)) for p in cont])
+                            except Exception:
+                                content = str(cont)
+                # fallback to response.output if present
+                if not content and hasattr(response, "output") and response.output:
+                    try:
+                        first = response.output[0]
+                        if hasattr(first, "content") and first.content:
+                            cont = first.content
+                            if isinstance(cont, str):
+                                content = cont
+                            else:
+                                content = "".join([getattr(p, "text", str(p)) for p in cont])
+                    except Exception:
+                        pass
+        except Exception:
+            try:
+                content = str(response)
+            except Exception:
+                content = ""
+
+        # Extract usage metadata safely
+        usage = {}
+        try:
+            um = getattr(response, "usage_metadata", None)
+            if um is not None:
+                usage = {
+                    "prompt_tokens": getattr(um, "prompt_token_count", None),
+                    "completion_tokens": getattr(um, "candidates_token_count", None),
+                    "total_tokens": getattr(um, "total_token_count", None),
+                }
+        except Exception:
+            usage = {}
 
         return {"content": content, "usage": usage, "latency_ms": latency_ms, "provider": "google"}
 
