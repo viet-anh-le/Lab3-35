@@ -31,6 +31,32 @@ class ReActAgent:
         You are an intelligent assistant. You have access to the following tools:
         {tool_descriptions}
 
+        If the user's intent is planning, the agent MUST follow this exact sequence when the user's intent is to plan a trip:
+
+        Step 1: Call weather tool
+            - Input: (normalized_location, start_date, end_date)
+            - Output: Weather forecast for the trip
+            - Purpose: Use weather to decide whether activities should be indoor/outdoor and to inform packing/advice.
+
+        Step 2: Call search_flights
+            - Input: (origin, normalized_location, start_date, end_date, preferences?)
+            - Output: A short list of candidate flights (price, carrier, depart/arrive times, duration)
+            - Purpose: Find feasible travel options and estimate travel time/cost.
+
+        Step 3: Call search_attractions
+            - Input: (normalized_location, start_date, end_date, interests?)
+            - Output: Ranked attractions/activities with brief reasons and estimated duration per activity
+            - Purpose: Propose daily activities and note which are indoor/outdoor (use weather from Step 1).
+
+        Step 4: Aggregate results
+            - Combine outputs from Steps 1-3 into a concise context for the LLM.
+            - Analyze constraints (weather, flight times, durations) and produce 1-3 itinerary options.
+            - For each option provide: daily schedule, transportation notes (flight), estimated costs, and packing/weather advice.
+
+        Step 5: Return Final Answer
+            - Input: aggregated context + selected itinerary
+            - Output: A human-readable itinerary and short justification. The Final Answer must include the key tool outputs (weather summary, top flights, top attractions) as an appendix or inline summary.
+
         Use the following format exactly (for the agent to parse your output):
         Thought: <your reasoning here>
         Action: <tool_name>(<arguments>)
@@ -55,7 +81,23 @@ class ReActAgent:
 
         system_prompt = self.get_system_prompt()
         # conversation buffer that we feed to the LLM (system_prompt is separate)
-        buffer = user_input
+        # Build buffer from stored history (if any) followed by the new user input
+        parts = []
+        for h in self.history:
+            if isinstance(h, dict):
+                if "user" in h:
+                    parts.append(f"User: {h['user']}")
+                if "llm" in h:
+                    parts.append(f"Assistant: {h['llm']}")
+                if "observation" in h:
+                    parts.append(f"Observation: {h['observation']}")
+            else:
+                parts.append(str(h))
+
+        # append current user input and store it in history for future turns
+        parts.append(f"User: {user_input}")
+        self.history.append({"user": user_input})
+        buffer = "\n".join(parts)
         steps = 0
 
         while steps < self.max_steps:
@@ -207,5 +249,3 @@ class ReActAgent:
                 return f"Tool {tool_name} found but not callable or missing handler."
 
         return f"Tool {tool_name} not found."
-    
-

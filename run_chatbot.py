@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import os
 from src.core.gemini_provider import GeminiProvider
 
+
 def main():
 
     load_dotenv()  # Load environment variables from .env file
@@ -22,17 +23,17 @@ def main():
     tools = [
         {
             "name": "search_attractions",
-            "description": "Find the top 5 attractions in a specified city. Arguments: {\"city\": \"City name\"}",
+            "description": 'Find the top 5 attractions in a specified city. Arguments: {"city": "City name"}',
             "func": attraction_tool_wrapper,
         },
         {
             "name": "search_flights",
-            "description": "Search for flights between two cities on a specific date. Arguments: {\"departure_city\": \"City of departure\", \"destination_city\": \"City of arrival\", \"departure_date\": \"Date of travel (YYYY-MM-DD)\"}",
+            "description": 'Search for flights between two cities on a specific date. Arguments: {"departure_city": "City of departure", "destination_city": "City of arrival", "departure_date": "Date of travel (YYYY-MM-DD)"}',
             "func": flight_search_tool_wrapper,
         },
         {
             "name": "weather_forecast",
-            "description": "Get the weather forecast for a city within a date range. Arguments: {\"city\": \"City name\", \"start_date\": \"Start date (YYYY-MM-DD)\", \"end_date\": \"End date (YYYY-MM-DD)\"}",
+            "description": 'Get the weather forecast for a city within a date range. Arguments: {"city": "City name", "start_date": "Start date (YYYY-MM-DD)", "end_date": "End date (YYYY-MM-DD)"}',
             "func": weather_tool_wrapper,
         },
     ]
@@ -41,7 +42,8 @@ def main():
     agent = ReActAgent(llm=llm, tools=tools)
 
     # Update the system prompt to enforce stricter rules
-    agent.get_system_prompt = lambda: f"""
+    agent.get_system_prompt = (
+        lambda: f"""
     You are an intelligent assistant. You have access to the following tools:
     {chr(10).join([f"- {t['name']}: {t['description']}" for t in tools])}
 
@@ -58,6 +60,7 @@ def main():
     3. Ensure all required arguments are provided and valid before calling a tool.
     4. Do not make assumptions about missing arguments; ask the user for clarification.
     """
+    )
 
     print("Chatbot is ready. Type your messages below. Type 'exit' to quit.")
 
@@ -69,6 +72,7 @@ def main():
 
         response = agent.run(user_input)
         print(f"Bot: {response}")
+
 
 if __name__ == "__main__":
     main()
