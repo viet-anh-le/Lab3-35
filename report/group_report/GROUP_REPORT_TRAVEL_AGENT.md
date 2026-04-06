@@ -35,7 +35,7 @@ User Input → LLM thinks about needed information
 
 | Tool Name              | Input Format                                         | Purpose                                                | Implementation      | Status               |
 | :--------------------- | :--------------------------------------------------- | :----------------------------------------------------- | :------------------ | :------------------- |
-| `get_weather`          | city, date (YYYY-MM-DD)                              | Get weather forecast and packing advice                | weatherapi.com API  | ⚠️ Validation needed |
+| `get_weather`          | city, date (YYYY-MM-DD)                              | Get weather forecast and packing advice                | weatherapi.com API  | ✅ Working |
 | `get_destination_info` | city                                                 | Get attractions, visa requirements, currency, language | Tavily Search API   | ✅ Working           |
 | `get_flight_price`     | origin, destination, departure_date                  | Get flight costs and airline options                   | Tavily Search API   | ✅ Working           |
 | `get_hotel_price`      | city, check_in_date, check_out_date, guests          | Get hotel prices by category (luxury/standard/budget)  | Mock database       | ✅ Functional        |
